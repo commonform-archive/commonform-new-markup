@@ -1,21 +1,33 @@
 module.exports = parse
 
-var ParseState = require('./parse-state')
+var ParserError = require('./parser-error')
+var ParserState = require('./parser-state')
 
-function parseFormWithoutHeading() {
-  var result = state.expect('
-}
+var TOKENS = require('./tokens')
 
-function parseHeading(state) {
-   }
-
-function parseFormWithHeading(state) {
-   }
+function parseFormWithoutHeading(state) {
+  var nextToken = state.peek()
+  var result = state.expect(TOKENS.TEXT)
+  if (!result) {
+    throw new ParserError(TOKENS.TEXT, nextToken) }
+  var text = result.token.string
+  nextToken = result.state.peek()
+  result = result.state.expect(TOKENS.NEWLINE)
+  if (!result) {
+    throw new ParserError(TOKENS.NEWLINE, nextToken) }
+  return {
+    state: result.state,
+    value: { content: [ text ] } } }
 
 function parseForm(state) {
-  // No heading
-  // With heading
   return parseFormWithoutHeading(state) }
 
 function parse(tokens) {
-  return parseForm(tokens) }
+  var state = new ParserState(tokens)
+  var result = parseForm(state)
+  if (result === null) {
+    throw new Error() }
+  else if (!result.state.empty()) {
+    throw new Error('Additional content') }
+  else {
+    return result.value }}
