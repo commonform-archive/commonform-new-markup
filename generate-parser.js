@@ -36,8 +36,8 @@ var grammar = {
     form: [
       [ 'TEXT',
         '$$ = { content: [ $1 ] }' ],
-      [ 'INDENT child',
-        '$$ = { content: [ $2 ] } ' ] ] } }
+      [ 'INDENT children DEDENT',
+        '$$ = { content: $2 } ' ] ] } }
 
 var options = {
   moduleType: 'commonjs',
