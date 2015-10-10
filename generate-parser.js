@@ -11,7 +11,7 @@ var grammar = {
         'return "DEDENT"' ],
       [ '>',
         'return "INDENT"' ],
-      [ '[a-z]+',
+      [ '[a-z ]+',
         'return "TEXT"' ],
       [ '$',
         'return "EOF"' ] ] },

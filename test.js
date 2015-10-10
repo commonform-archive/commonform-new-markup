@@ -76,4 +76,8 @@ tape(function(test) {
               { form: { content: [ 'c' ] } } ] } } ] } },
       { form: { content: [ 'd' ] } } ] })
 
+  test.deepEqual(
+    parse('\\\\multiple words'),
+    { content: [ { form: { content: [ 'multiple words' ] } } ] })
+
   test.end() })
