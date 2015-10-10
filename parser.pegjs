@@ -3,24 +3,34 @@ Start
     { return { content: c } }
 
 Content
-  = p:FlushParagraphs s:Series?
-    { return p.concat(s || [ ]) }
-  / s:Series p:DedentedParagraphs?
-    { return s.concat(p || [ ]) }
-  / s:Series m:ParagraphsThenSeries*
-    { return s.concat(m) }
+  = p:Paragraphs
+    { return p }
+  / s:Series
+    { return s }
+  / ps:ParagraphsThenSeries+
+    { return ps }
+  / ps:ParagraphsThenSeries+ p:Paragraphs
+    { return ps.concat(p) }
+  / s:Series p:Paragraphs
+    { return s.concat(p) }
+  / s:Series ps:ParagraphsThenSeries+
+    { return s.concat(ps) }
+  / s:Series ps:ParagraphsThenSeries+ p:Paragraphs
+    { return s.concat(ps).concat(p) }
+
+More
+  = s:Series
+    { return s }
+  / ( s:Series p:Paragraph )+
+    { return s.concat(p) }
 
 ParagraphsThenSeries
-  = p:DedentedParagraphs s:Series
+  = p:Paragraphs s:Series
     { return p.concat(s) }
 
-FlushParagraphs
+Paragraphs
   = p:Paragraph m:( AnotherParagraph )*
     { return [ p ].concat(m) }
-
-DedentedParagraphs
-  = Dedent NewLine p:FlushParagraphs
-    { return p }
 
 AnotherParagraph
   = NewLine p:Paragraph
@@ -66,4 +76,4 @@ Dedent
   = "<"
 
 NewLine
-  = "|"
+  = [\n]
