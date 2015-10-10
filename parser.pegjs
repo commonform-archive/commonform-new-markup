@@ -8,7 +8,8 @@ Content
   / s:Series ps:ParagraphsThenSeries+
     { return s.concat(ps) }
   / ps:ParagraphsThenSeries+ p:Paragraphs?
-    { return ps.concat(p || [ ]) }
+    { ps = ps.reduce(function(x, y) { return x.concat(y) })
+      return ps.concat(p || [ ]) }
   / s:Series p:Paragraphs?
     { return s.concat(p || [ ]) }
   / p:Paragraphs
@@ -20,7 +21,7 @@ ParagraphsThenSeries
 
 Paragraphs
   = p:Paragraph m:( AnotherParagraph )*
-    { return p.concat(m) }
+    { return [ p ].concat(m) }
 
 AnotherParagraph
   = NewLine p:Paragraph

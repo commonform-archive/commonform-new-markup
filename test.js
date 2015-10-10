@@ -74,8 +74,8 @@ tape(function(test) {
           '\\\\' + 'b' + '\n' +
           '\\\\' + 'c' +
         DE +
-        '\\\\' + 'd' +
-      DE
+      DE +
+      '\\\\' + 'd'
     ),
     { content: [
       { form: {
@@ -83,7 +83,10 @@ tape(function(test) {
           'a',
           { form: { content: [ 'b' ] } },
           { form: { content: [ 'c' ] } } ] } },
-      { form: { content: [ 'd' ] } } ] })
+      { form: { content: [ 'd' ] } } ] },
+  'back to top level')
+
+  return test.end()
 
   test.deepEqual(
     parse(
