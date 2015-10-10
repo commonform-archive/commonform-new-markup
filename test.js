@@ -7,11 +7,18 @@ var DE = '<'
 tape(function(test) {
 
   test.deepEqual(
+    parse('\\\\a>\\\\a<|b'),
+    { content: [
+      'a',
+      { form: { content: [ 'a' ] } },
+      'b' ] })
+
+  test.deepEqual(
     parse('\\\\test'),
     { content: [ { form: { content: [ 'test' ] } } ] })
 
   test.deepEqual(
-    parse('\\\\a\n\\\\b'),
+    parse('\\\\a|\\\\b'),
     { content: [
       { form: { content: [ 'a' ] } },
       { form: { content: [ 'b' ] } } ] })
@@ -30,7 +37,7 @@ tape(function(test) {
           { form: { content: [ 'b' ] } } ] } } ] })
 
   test.deepEqual(
-    parse('\\\\' + IN + '\\\\b\n\\\\c' + DE),
+    parse('\\\\' + IN + '\\\\b|\\\\c' + DE),
     { content: [
       { form: {
         content: [
@@ -38,7 +45,7 @@ tape(function(test) {
           { form: { content: [ 'c' ] } } ] } } ] })
 
   test.deepEqual(
-    parse('\\\\a' + IN + '\\\\b\n\\\\c' + DE),
+    parse('\\\\a' + IN + '\\\\b|\\\\c' + DE),
     { content: [
       { form: {
         content: [
@@ -49,8 +56,8 @@ tape(function(test) {
   test.deepEqual(
     parse((
       '\\\\a' + IN +
-        '\\\\b\n' +
-        '\\\\c' + DE + '\n' +
+        '\\\\b' + '|' +
+        '\\\\c' + DE + '|' +
       '\\\\d' )),
     { content: [
       { form: {
@@ -64,7 +71,7 @@ tape(function(test) {
     parse((
       '\\\\a' + IN +
         '\\\\b' + IN +
-          '\\\\c' + DE + DE + '\n' +
+          '\\\\c' + DE + DE + '|' +
       '\\\\d' )),
     { content: [
       { form: {
@@ -83,8 +90,8 @@ tape(function(test) {
   test.deepEqual(
     parse((
       '\\\\a' + IN +
-        '\\\\b' + '\n' +
-        'c' + DE )),
+        '\\\\b' + DE + '|' +
+      'c')),
     { content: [
       { form: {
         content: [
@@ -95,9 +102,9 @@ tape(function(test) {
   test.deepEqual(
     parse((
       '\\\\a' + IN +
-        '\\\\b' + '\n' +
-        'c' + '\n' +
-        'd' + DE )),
+        '\\\\b' + DE + '|' +
+      'c' + '|' +
+      'd')),
     { content: [
       { form: {
         content: [

@@ -5,7 +5,9 @@ var grammar = {
     rules: [
       [ '\\\\\\\\',
         'return "SLASHES"' ],
-      [ '\\n',
+      [ '!!',
+        'return "BANGS"' ],
+      [ '\\|',
         'return "NEWLINE"' ],
       [ '<',
         'return "DEDENT"' ],
@@ -20,32 +22,35 @@ var grammar = {
     start: [
       [ 'children EOF',
         'return { content: $1 }' ] ],
-    children: [
-      [ 'child',
-        '$$ = [ $1 ]' ],
-      [ 'TEXT',
-        '$$ = [ $1 ]' ],
-      [ 'child morechildren',
-        '$$ = [ $1 ].concat($2)' ],
-      [ 'TEXT morechildren',
-        '$$ = [ $1 ].concat($2)' ] ],
-    morechildren: [
-      [ 'NEWLINE children',
-        '$$ = $2' ] ],
     child: [
-      [ 'TEXT SLASHES form',
+      [ 'heading SLASHES form',
         '$$ = { heading: $1, form: $3 }' ],
       [ 'SLASHES form',
         '$$ = { form: $2 }' ] ],
-    form: [
+    paragraph: [
       [ 'TEXT',
-        '$$ = { content: [ $1 ] }' ],
-      [ 'TEXT INDENT children DEDENT',
-        '$$ = { content: [ $1 ].concat($3) }' ],
+        '$$ = [ $1 ]' ] ],
+    heading: [
+      [ 'paragraph',
+        '$$ = $1.join("")' ] ],
+    children: [
+      [ 'child',
+        '$$ = $1' ],
+      [ 'children NEWLINE child',
+        '$$ = $1.concat($2)' ] ],
+    paragraphs: [
+      [ 'paragraph',
+        '$$ = $1' ],
+      [ 'paragraphs NEWLINE paragraph',
+        '$$ = $1.concat($2)' ] ],
+    form: [
+      [ 'paragraphs',
+        '$$ = $1; console.log($$)' ],
       [ 'INDENT children DEDENT',
-        '$$ = { content: $2 } ' ] ] } }
+        '$$ = { content: $2 }; console.log($$)' ] ] } }
 
 var options = {
+  type: 'lalr',
   moduleType: 'commonjs',
   moduleName: 'commonform' }
 
