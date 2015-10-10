@@ -21,11 +21,13 @@ var grammar = {
       [ 'child morechildren' ,
         '$$ = [ $1 ].concat($2)' ] ],
     morechildren: [
-      [ 'NEWLINE child', '$$ = $1' ],
-      [ 'NEWLINE child morechildren', '$$ = $1' ] ],
+      [ 'NEWLINE child',
+        '$$ = [ $2 ]' ],
+      [ 'NEWLINE child morechildren',
+        '$$ = [ $2 ].concat($3)' ] ],
     child: [
       [ 'content SLASHES content',
-        '$$ = { heading: $1, form: { content: $2 } }' ],
+        '$$ = { heading: $1, form: { content: $3 } }' ],
       [ 'SLASHES content',
         '$$ = { form: { content: $2 } }' ] ],
     content: [
