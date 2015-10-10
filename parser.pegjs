@@ -3,26 +3,16 @@ Start
     { return { content: c } }
 
 Content
-  = p:Paragraphs
-    { return p }
-  / s:Series
-    { return s }
-  / ps:ParagraphsThenSeries+
-    { return ps }
-  / ps:ParagraphsThenSeries+ p:Paragraphs
-    { return ps.concat(p) }
-  / s:Series p:Paragraphs
-    { return s.concat(p) }
+  = s:Series ps:ParagraphsThenSeries+ p:Paragraphs
+    { return s.concat(ps).concat(p) }
   / s:Series ps:ParagraphsThenSeries+
     { return s.concat(ps) }
-  / s:Series ps:ParagraphsThenSeries+ p:Paragraphs
-    { return s.concat(ps).concat(p) }
-
-More
-  = s:Series
-    { return s }
-  / ( s:Series p:Paragraph )+
-    { return s.concat(p) }
+  / ps:ParagraphsThenSeries+ p:Paragraphs?
+    { return ps.concat(p || [ ]) }
+  / s:Series p:Paragraphs?
+    { return s.concat(p || [ ]) }
+  / p:Paragraphs
+    { return p }
 
 ParagraphsThenSeries
   = p:Paragraphs s:Series
@@ -30,7 +20,7 @@ ParagraphsThenSeries
 
 Paragraphs
   = p:Paragraph m:( AnotherParagraph )*
-    { return [ p ].concat(m) }
+    { return p.concat(m) }
 
 AnotherParagraph
   = NewLine p:Paragraph

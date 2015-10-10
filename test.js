@@ -57,17 +57,6 @@ tape(function(test) {
 
   test.deepEqual(
     parse(IN + '\\\\a' + IN + '\\\\b\n\\\\c' + DE + DE),
-    // parse(
-      // IN +
-        // '\\\\' +
-        // 'a' +
-        // IN +
-          // '\\\\' + 'b' + '\n' +
-          // '\\\\' + 'c' +
-        // DE
-        // +
-      // DE
-    // ),
     { content: [
       { form: {
         content: [
@@ -75,8 +64,6 @@ tape(function(test) {
           { form: { content: [ 'b' ] } },
           { form: { content: [ 'c' ] } } ] } } ] },
     'consecutive children after par')
-
-  return test.end()
 
   test.deepEqual(
     parse(
