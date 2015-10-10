@@ -37,4 +37,13 @@ tape(function(test) {
           { form: { content: [ 'b' ] } },
           { form: { content: [ 'c' ] } } ] } } ] })
 
+  test.deepEqual(
+    parse('\\\\a' + IN + '\\\\b\n\\\\c' + OUT),
+    { content: [
+      { form: {
+        content: [
+          'a',
+          { form: { content: [ 'b' ] } },
+          { form: { content: [ 'c' ] } } ] } } ] })
+
   test.end() })

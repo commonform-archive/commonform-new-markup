@@ -36,6 +36,8 @@ var grammar = {
     form: [
       [ 'TEXT',
         '$$ = { content: [ $1 ] }' ],
+      [ 'TEXT INDENT children DEDENT',
+        '$$ = { content: [ $1 ].concat($3) }' ],
       [ 'INDENT children DEDENT',
         '$$ = { content: $2 } ' ] ] } }
 
