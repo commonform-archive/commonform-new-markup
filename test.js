@@ -14,30 +14,30 @@ tape(function(test) {
   //     'b' ] })
 
   test.deepEqual(
-    parse('\\\\test'),
+    parse(IN + '\\\\test' + DE),
     { content: [ { form: { content: [ 'test' ] } } ] })
 
   test.deepEqual(
-    parse('\\\\a|\\\\b'),
+    parse(IN + '\\\\a|\\\\b' + DE),
     { content: [
       { form: { content: [ 'a' ] } },
       { form: { content: [ 'b' ] } } ] })
 
   test.deepEqual(
-    parse('heading\\\\test'),
+    parse(IN + 'heading\\\\test' + DE),
     { content: [
       { heading: 'heading',
         form: { content: [ 'test' ] } } ] })
 
   test.deepEqual(
-    parse('\\\\' + IN + '\\\\b' + DE),
+    parse(IN + '\\\\' + IN + '\\\\b' + DE + DE),
     { content: [
       { form: {
         content: [
           { form: { content: [ 'b' ] } } ] } } ] })
 
   test.deepEqual(
-    parse('\\\\' + IN + '\\\\b|\\\\c' + DE),
+    parse(IN + '\\\\' + IN + '\\\\b|\\\\c' + DE + DE),
     { content: [
       { form: {
         content: [
@@ -45,7 +45,7 @@ tape(function(test) {
           { form: { content: [ 'c' ] } } ] } } ] })
 
   test.deepEqual(
-    parse('\\\\a' + IN + '\\\\b|\\\\c' + DE),
+    parse(IN + '\\\\a' + IN + '\\\\b|\\\\c' + DE + DE),
     { content: [
       { form: {
         content: [
@@ -54,11 +54,11 @@ tape(function(test) {
           { form: { content: [ 'c' ] } } ] } } ] })
 
   test.deepEqual(
-    parse((
+    parse(IN + (
       '\\\\a' + IN +
         '\\\\b' + '|' +
         '\\\\c' + DE + '|' +
-      '\\\\d' )),
+      '\\\\d' + DE)),
     { content: [
       { form: {
         content: [
@@ -68,11 +68,11 @@ tape(function(test) {
       { form: { content: [ 'd' ] } } ] })
 
   test.deepEqual(
-    parse((
+    parse(IN + (
       '\\\\a' + IN +
         '\\\\b' + IN +
           '\\\\c' + DE + DE + '|' +
-      '\\\\d' )),
+      '\\\\d' + DE)),
     { content: [
       { form: {
         content: [
@@ -84,14 +84,14 @@ tape(function(test) {
       { form: { content: [ 'd' ] } } ] })
 
   test.deepEqual(
-    parse('\\\\multiple words'),
+    parse(IN + '\\\\multiple words' + DE),
     { content: [ { form: { content: [ 'multiple words' ] } } ] })
 
   test.deepEqual(
-    parse((
+    parse(IN + (
       '\\\\a' + IN +
         '\\\\b' + DE + '|' +
-      'c')),
+      'c' + DE)),
     { content: [
       { form: {
         content: [
@@ -100,11 +100,11 @@ tape(function(test) {
           'c' ] } } ] })
 
   test.deepEqual(
-    parse((
+    parse(IN + (
       '\\\\a' + IN +
         '\\\\b' + DE + '|' +
       'c' + '|' +
-      'd')),
+      'd' + DE)),
     { content: [
       { form: {
         content: [
