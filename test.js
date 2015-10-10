@@ -1,8 +1,8 @@
 var tape = require('tape')
 var parse = require('.')
 
-var IN = '\x0F'
-var OUT = '\x0E'
+var IN = '>'
+var DE = '<'
 
 tape(function(test) {
 
@@ -23,14 +23,14 @@ tape(function(test) {
         form: { content: [ 'test' ] } } ] })
 
   test.deepEqual(
-    parse('\\\\' + IN + '\\\\b' + OUT),
+    parse('\\\\' + IN + '\\\\b' + DE),
     { content: [
       { form: {
         content: [
           { form: { content: [ 'b' ] } } ] } } ] })
 
   test.deepEqual(
-    parse('\\\\' + IN + '\\\\b\n\\\\c' + OUT),
+    parse('\\\\' + IN + '\\\\b\n\\\\c' + DE),
     { content: [
       { form: {
         content: [
@@ -38,12 +38,42 @@ tape(function(test) {
           { form: { content: [ 'c' ] } } ] } } ] })
 
   test.deepEqual(
-    parse('\\\\a' + IN + '\\\\b\n\\\\c' + OUT),
+    parse('\\\\a' + IN + '\\\\b\n\\\\c' + DE),
     { content: [
       { form: {
         content: [
           'a',
           { form: { content: [ 'b' ] } },
           { form: { content: [ 'c' ] } } ] } } ] })
+
+  test.deepEqual(
+    parse((
+      '\\\\a' + IN +
+        '\\\\b\n' +
+        '\\\\c' + DE + '\n' +
+      '\\\\d' )),
+    { content: [
+      { form: {
+        content: [
+          'a',
+          { form: { content: [ 'b' ] } },
+          { form: { content: [ 'c' ] } } ] } },
+      { form: { content: [ 'd' ] } } ] })
+
+  test.deepEqual(
+    parse((
+      '\\\\a' + IN +
+        '\\\\b' + IN +
+          '\\\\c' + DE + DE + '\n' +
+      '\\\\d' )),
+    { content: [
+      { form: {
+        content: [
+          'a',
+          { form: {
+            content: [
+              'b',
+              { form: { content: [ 'c' ] } } ] } } ] } },
+      { form: { content: [ 'd' ] } } ] })
 
   test.end() })
