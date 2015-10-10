@@ -3,30 +3,34 @@ Start
     { return { content: c } }
 
 Content
-  = p:Paragraphs m:( Series Paragraphs )*
-    { var rest = m.map(function(e) { return e[0].concat(e[1]) })
-      return p.concat(rest) }
-  / p:Paragraphs s:Series
-    { return p.concat(s) }
-  / s:Series m:( Paragraphs Series )*
-    { var rest = m.map(function(e) { return e[0].concat(e[1]) })
-      return s.concat(rest) }
-  / s:Series p:Paragraphs
-    { return s.concat(p) }
+  = p:FlushParagraphs s:Series?
+    { return p.concat(s || [ ]) }
+  / s:Series p:DedentedParagraphs?
+    { return s.concat(p || [ ]) }
+  / s:Series m:ParagraphsThenSeries*
+    { return s.concat(m) }
 
-Paragraphs
-  = Dedent p:Paragraph m:( MoreParagraphs )*
+ParagraphsThenSeries
+  = p:DedentedParagraphs s:Series
+    { return p.concat(s) }
+
+FlushParagraphs
+  = p:Paragraph m:( AnotherParagraph )*
     { return [ p ].concat(m) }
 
-MoreParagraphs
+DedentedParagraphs
+  = Dedent NewLine p:FlushParagraphs
+    { return p }
+
+AnotherParagraph
   = NewLine p:Paragraph
     { return p }
 
 Series
-  = Indent c:Child m:( MoreChildren )* Dedent
+  = Indent c:Child m:( AnotherChild )* Dedent
     { return [ c ].concat(m) }
 
-MoreChildren
+AnotherChild
   = NewLine c:Child
     { return c }
 
@@ -39,22 +43,13 @@ Child
   / "\\\\" f:Form
     { return { form: f } }
 
+Form
+  = c:Content
+    { return { content: c } }
+
 Heading
   = t:Text
     { return t.join('') }
-
-Form
-  = p:Paragraphs c:Indented?
-    { if (c) {
-        return { content: p.concat(c) } }
-      else {
-        return { content: p } } }
-  / c:Indented
-    { return { content: c } }
-
-Indented
-  = Indent c:Content
-    { return c }
 
 Paragraph
   = t:Text

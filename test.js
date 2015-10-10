@@ -14,6 +14,10 @@ tape(function(test) {
   //     'b' ] })
 
   test.deepEqual(
+    parse('test'),
+    { content: [ 'test' ] })
+
+  test.deepEqual(
     parse(IN + '\\\\test' + DE),
     { content: [ { form: { content: [ 'test' ] } } ] })
 
@@ -43,6 +47,12 @@ tape(function(test) {
         content: [
           { form: { content: [ 'b' ] } },
           { form: { content: [ 'c' ] } } ] } } ] })
+
+  test.deepEqual(
+    parse(IN + '\\\\a|\\\\b' + DE),
+    { content: [
+        { form: { content: [ 'a' ] } },
+        { form: { content: [ 'b' ] } } ] })
 
   test.deepEqual(
     parse(IN + '\\\\a' + IN + '\\\\b|\\\\c' + DE + DE),
