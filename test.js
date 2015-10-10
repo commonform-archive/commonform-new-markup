@@ -80,4 +80,30 @@ tape(function(test) {
     parse('\\\\multiple words'),
     { content: [ { form: { content: [ 'multiple words' ] } } ] })
 
+  test.deepEqual(
+    parse((
+      '\\\\a' + IN +
+        '\\\\b' + '\n' +
+        'c' + DE )),
+    { content: [
+      { form: {
+        content: [
+          'a',
+          { form: { content: [ 'b' ] } },
+          'c' ] } } ] })
+
+  test.deepEqual(
+    parse((
+      '\\\\a' + IN +
+        '\\\\b' + '\n' +
+        'c' + '\n' +
+        'd' + DE )),
+    { content: [
+      { form: {
+        content: [
+          'a',
+          { form: { content: [ 'b' ] } },
+          'c',
+          'd' ] } } ] })
+
   test.end() })

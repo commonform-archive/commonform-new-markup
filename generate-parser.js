@@ -23,7 +23,11 @@ var grammar = {
     children: [
       [ 'child',
         '$$ = [ $1 ]' ],
+      [ 'TEXT',
+        '$$ = [ $1 ]' ],
       [ 'child morechildren',
+        '$$ = [ $1 ].concat($2)' ],
+      [ 'TEXT morechildren',
         '$$ = [ $1 ].concat($2)' ] ],
     morechildren: [
       [ 'NEWLINE children',
