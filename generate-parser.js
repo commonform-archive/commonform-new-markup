@@ -7,10 +7,15 @@ var grammar = {
         'return "SLASHES"' ],
       [ '\\n',
         'return "NEWLINE"' ],
+      [ '\x0E',
+        'return "DEDENT"' ],
+      [ '\x0F',
+        'return "INDENT"' ],
       [ '[a-z]+',
         'return "TEXT"' ],
       [ '$',
         'return "EOF"' ] ] },
+  start: 'start',
   bnf: {
     start: [
       [ 'children EOF',
@@ -18,24 +23,23 @@ var grammar = {
     children: [
       [ 'child',
         '$$ = [ $1 ]' ],
-      [ 'child morechildren' ,
+      [ 'child morechildren',
         '$$ = [ $1 ].concat($2)' ] ],
     morechildren: [
-      [ 'NEWLINE child',
-        '$$ = [ $2 ]' ],
-      [ 'NEWLINE child morechildren',
-        '$$ = [ $2 ].concat($3)' ] ],
+      [ 'NEWLINE children',
+        '$$ = $2' ] ],
     child: [
-      [ 'content SLASHES content',
-        '$$ = { heading: $1.join(""), form: { content: $3 } }' ],
-      [ 'SLASHES content',
-        '$$ = { form: { content: $2 } }' ] ],
-    content: [
+      [ 'TEXT SLASHES form',
+        '$$ = { heading: $1, form: $3 }' ],
+      [ 'SLASHES form',
+        '$$ = { form: $2 }' ] ],
+    form: [
       [ 'TEXT',
-        '$$ = [ $1 ]' ] ] } }
+        '$$ = { content: [ $1 ] }' ],
+      [ 'INDENT child',
+        '$$ = { content: [ $2 ] } ' ] ] } }
 
 var options = {
-  type: 'lalr',
   moduleType: 'commonjs',
   moduleName: 'commonform' }
 

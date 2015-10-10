@@ -1,6 +1,9 @@
 var tape = require('tape')
 var parse = require('.')
 
+var IN = '\x0F'
+var OUT = '\x0E'
+
 tape(function(test) {
 
   test.deepEqual(
@@ -18,5 +21,12 @@ tape(function(test) {
     { content: [
       { heading: 'heading',
         form: { content: [ 'test' ] } } ] })
+
+  test.deepEqual(
+    parse('\\\\' + IN + '\\\\b'),
+    { content: [
+      { form: {
+        content: [
+          { form: { content: [ 'b' ] } } ] } } ] })
 
   test.end() })
