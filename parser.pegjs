@@ -21,7 +21,10 @@ ParagraphsThenSeries
 
 Paragraphs
   = p:Paragraph m:( AnotherParagraph )*
-    { return [ p ].concat(m) }
+    { return m.reduce(
+        function(result, element) {
+          return result.concat(element) },
+        p) }
 
 AnotherParagraph
   = NewLine p:Paragraph
@@ -50,21 +53,46 @@ Form
 
 Heading
   = t:Text
-    { return t.join('') }
+    { return t }
 
 Paragraph
-  = t:Text
-    { return t.join('') }
+  = c:InlineContent+
+    { return c.reduce(
+        function(x, y) { return x.concat(y) },
+        [ ]) }
+
+InlineContent
+  = Blank
+  / Definition
+  / Use
+  / Reference
+  / Text
+
+Blank
+  = '[' t:Text ']'
+    { return { blank: t } }
+
+Definition
+  = '""' t:Text '""'
+    { return { definition: t } }
+
+Use
+  = '<' t:Text '>'
+    { return { use: t } }
+
+Reference
+  = '{' t:Text '}'
+    { return { reference: t } }
 
 Text
-  = chars:[a-z ]+
-    { return chars }
+  = chars:[a-zA-Z ]+
+    { return chars.join('') }
 
 Indent
-  = ">"
+  = "\x0F"
 
 Dedent
-  = "<"
+  = "\x0E"
 
 NewLine
-  = [\n]
+  = "\n"

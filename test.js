@@ -11,58 +11,53 @@ function parse(input) {
     process.stderr.write(e + '\n')
     throw e } }
 
-var IN = '>'
-var DE = '<'
+var IN = '\x0F'
+var DE = '\x0E'
 
 tape(function(test) {
 
   test.deepEqual(
-    parse('test'),
-    { content: [ 'test' ] })
+    parse('test').content,
+    [ 'test' ])
 
   test.deepEqual(
-    parse(IN + '\\\\test' + DE),
-    { content: [ { form: { content: [ 'test' ] } } ] })
+    parse(IN + '\\\\test' + DE).content,
+    [ { form: { content: [ 'test' ] } } ])
 
   test.deepEqual(
-    parse(IN + 'heading\\\\test' + DE),
-    { content: [
-      { heading: 'heading',
-        form: { content: [ 'test' ] } } ] },
+    parse(IN + 'heading\\\\test' + DE).content,
+    [ { heading: 'heading',
+      form: { content: [ 'test' ] } } ],
     'with heading')
 
   test.deepEqual(
-    parse(IN + '\\\\' + IN + '\\\\b' + DE + DE),
-    { content: [
-      { form: {
+    parse(IN + '\\\\' + IN + '\\\\b' + DE + DE).content,
+    [ { form: {
         content: [
-          { form: { content: [ 'b' ] } } ] } } ] },
+          { form: { content: [ 'b' ] } } ] } } ],
     'first element is child')
 
   test.deepEqual(
-    parse(IN + '\\\\' + IN + '\\\\b\n\\\\c' + DE + DE),
-    { content: [
-      { form: {
+    parse(IN + '\\\\' + IN + '\\\\b\n\\\\c' + DE + DE).content,
+    [ { form: {
         content: [
           { form: { content: [ 'b' ] } },
-          { form: { content: [ 'c' ] } } ] } } ] },
+          { form: { content: [ 'c' ] } } ] } } ],
     'consecutive nested children')
 
   test.deepEqual(
-    parse(IN + '\\\\a\n\\\\b' + DE),
-    { content: [
-      { form: { content: [ 'a' ] } },
-      { form: { content: [ 'b' ] } } ] },
+    parse(IN + '\\\\a\n\\\\b' + DE).content,
+    [ { form: { content: [ 'a' ] } },
+      { form: { content: [ 'b' ] } } ],
     'consecutive children')
 
   test.deepEqual(
-    parse(IN + '\\\\a' + IN + '\\\\b\n\\\\c' + DE + DE),
-    { content: [
-      { form: {
+    parse(IN + '\\\\a' + IN + '\\\\b\n\\\\c' + DE + DE).content,
+    [ { form: {
         content: [
           'a',
           { form: { content: [ 'b' ] } },
-          { form: { content: [ 'c' ] } } ] } } ] },
+          { form: { content: [ 'c' ] } } ] } } ],
     'consecutive children after par')
 
   test.deepEqual(
@@ -77,14 +72,13 @@ tape(function(test) {
       '\\\\' +
       'd' +
       DE
-    ),
-    { content: [
-      { form: {
+    ).content,
+    [ { form: {
         content: [
           'a',
           { form: { content: [ 'b' ] } },
           { form: { content: [ 'c' ] } } ] } },
-      { form: { content: [ 'd' ] } } ] },
+      { form: { content: [ 'd' ] } } ],
   'back to top level')
 
   test.deepEqual(
@@ -98,20 +92,19 @@ tape(function(test) {
           DE +
         '\\\\d' +
       DE
-    ),
-    { content: [
-      { form: {
+    ).content,
+    [ { form: {
         content: [
           'a',
           { form: {
             content: [
               'b',
               { form: { content: [ 'c' ] } } ] } } ] } },
-      { form: { content: [ 'd' ] } } ] })
+      { form: { content: [ 'd' ] } } ])
 
   test.deepEqual(
-    parse(IN + '\\\\multiple words' + DE),
-    { content: [ { form: { content: [ 'multiple words' ] } } ] },
+    parse(IN + '\\\\multiple words' + DE).content,
+    [ { form: { content: [ 'multiple words' ] } } ],
     'text with space')
 
   test.deepEqual(
@@ -125,13 +118,12 @@ tape(function(test) {
         DE +
         'c' +
       DE
-    ),
-    { content: [
-      { form: {
+    ).content,
+    [ { form: {
         content: [
           'a',
           { form: { content: [ 'b' ] } },
-          'c' ] } } ] },
+          'c' ] } } ],
     'par-childpar')
 
   test.deepEqual(
@@ -146,14 +138,33 @@ tape(function(test) {
         'c' + '\n' +
         'd' +
       DE
-    ),
-    { content: [
-      { form: {
+    ).content,
+    [ { form: {
         content: [
           'a',
           { form: { content: [ 'b' ] } },
           'c',
-          'd' ] } } ] },
+          'd' ] } } ],
     'consecutive nested paragraphs')
+
+  test.deepEqual(
+    parse(
+      IN +
+        '\\\\' +
+        'a' + ' ' +
+        '[blank]' + ' ' +
+        '<use>' + ' ' +
+        '""definition""' + ' ' +
+        '{reference}' +
+      DE
+    ).content,
+    [ { form: {
+        content: [
+          'a ',
+          { blank: 'blank' }, ' ',
+          { use: 'use' }, ' ',
+          { definition: 'definition' }, ' ',
+          { reference: 'reference' } ] } } ],
+      'inline elemets')
 
   test.end() })
