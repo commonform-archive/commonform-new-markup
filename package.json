@@ -1,0 +1,17 @@
+{
+  "name": "commonform-new-markup",
+  "version": "0.0.0",
+  "description": "",
+  "author": "Kyle E. Mitchell <kyle@kemitchell.com> (https://kemitchell.com/)",
+  "repository": "commonform/commonform-new-markup",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "jison": "^0.4.15",
+    "tape": "^4.2.1"
+  },
+  "scripts": {
+    "prepublish": "node generate-parser.js > parser.js",
+    "test": "tape test.js",
+    "pretest": "npm run prepublish"
+  }
+}
