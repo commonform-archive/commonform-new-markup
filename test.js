@@ -8,7 +8,7 @@ function parse(input) {
   try {
     return parser.parse(input) }
   catch (e) {
-    console.error(e)
+    process.stderr.write(e + '\n')
     throw e } }
 
 var IN = '>'
@@ -74,8 +74,9 @@ tape(function(test) {
           '\\\\' + 'b' + '\n' +
           '\\\\' + 'c' +
         DE +
-      DE +
-      '\\\\' + 'd'
+      '\\\\' +
+      'd' +
+      DE
     ),
     { content: [
       { form: {
@@ -85,8 +86,6 @@ tape(function(test) {
           { form: { content: [ 'c' ] } } ] } },
       { form: { content: [ 'd' ] } } ] },
   'back to top level')
-
-  return test.end()
 
   test.deepEqual(
     parse(

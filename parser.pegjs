@@ -32,7 +32,7 @@ Series
     { return [ c ].concat(m) }
 
 AnotherChild
-  = NewLine c:Child
+  = NewLine? c:Child
     { return c }
 
 Child
