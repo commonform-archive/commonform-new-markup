@@ -13,4 +13,10 @@ tape(function(test) {
       { form: { content: [ 'a' ] } },
       { form: { content: [ 'b' ] } } ] })
 
+  test.deepEqual(
+    parse('heading\\\\test'),
+    { content: [
+      { heading: 'heading',
+        form: { content: [ 'test' ] } } ] })
+
   test.end() })

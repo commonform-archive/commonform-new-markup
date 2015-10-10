@@ -27,7 +27,7 @@ var grammar = {
         '$$ = [ $2 ].concat($3)' ] ],
     child: [
       [ 'content SLASHES content',
-        '$$ = { heading: $1, form: { content: $3 } }' ],
+        '$$ = { heading: $1.join(""), form: { content: $3 } }' ],
       [ 'SLASHES content',
         '$$ = { form: { content: $2 } }' ] ],
     content: [
