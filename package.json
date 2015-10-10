@@ -6,11 +6,11 @@
   "repository": "commonform/commonform-new-markup",
   "license": "Apache-2.0",
   "devDependencies": {
-    "jison": "^0.4.15",
+    "pegjs": "^0.9.0",
     "tape": "^4.2.1"
   },
   "scripts": {
-    "prepublish": "node generate-parser.js > parser.js",
+    "prepublish": "pegjs parser.pegjs",
     "test": "tape test.js",
     "pretest": "npm run prepublish"
   }

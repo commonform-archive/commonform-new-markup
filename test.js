@@ -6,12 +6,12 @@ var DE = '<'
 
 tape(function(test) {
 
-  test.deepEqual(
-    parse('\\\\a>\\\\a<|b'),
-    { content: [
-      'a',
-      { form: { content: [ 'a' ] } },
-      'b' ] })
+  // test.deepEqual(
+  //   parse('\\\\a>\\\\a<|b'),
+  //   { content: [
+  //     'a',
+  //     { form: { content: [ 'a' ] } },
+  //     'b' ] })
 
   test.deepEqual(
     parse('\\\\test'),
