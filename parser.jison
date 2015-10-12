@@ -35,8 +35,10 @@ children
   ;
 
 child
-  : SLASHES content            { $$ = { form: { content: $2 } } }
-  | SLASHES paragraphs NEWLINE { $$ = { form: { content: $2 } } }
+  : SLASHES content             { $$ = { form: { content: $2 } } }
+  | SLASHES paragraphs NEWLINE  { $$ = { form: { content: $2 } } }
+  | BANGS content               { $$ = { form: { conspicuous: 'yes', content: $2 } } }
+  | BANGS paragraphs NEWLINE    { $$ = { form: { conspicuous: 'yes', content: $2 } } }
   ;
 
 paragraphs
