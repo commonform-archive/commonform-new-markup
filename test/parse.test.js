@@ -139,4 +139,49 @@ tape('parser', function(test) {
     { content: [ 'a b' ] },
     'collapse double space in text')
 
+    parse([
+      '    \\\\\\\\A',
+      '        \\\\\\\\B' ].join('\n'),
+      { content: [
+          { form: { content: [
+              'A',
+              { form: { content: [ 'B' ] } } ] } } ] },
+      'text A text B')
+
+    parse([
+      '    \\\\\\\\A',
+      '        \\\\\\\\B',
+      '    C',
+      '    \\\\\\\\D' ].join('\n'),
+      { content: [
+          { form: { content: [
+              'A',
+              { form: { content: [ 'B' ] } } ] } },
+          'C',
+          { form: { content: [ 'D' ] } } ] },
+      'real-world')
+
+    // parse([
+    //   '    \\\\A\\\\',
+    //   '        \\\\B\\\\U',
+    //   '        \\\\C\\\\V',
+    //   '            \\\\\\\\W',
+    //   '            \\\\\\\\X',
+    //   '        Y',
+    //   '        \\\\\\\\Z' ].join('\n'),
+    //   { content: [
+    //       { heading: 'A',
+    //         form: { content: [
+    //           { heading: 'B',
+    //             form: { content: [ 'U' ] } },
+    //           { heading: 'B',
+    //             form: {
+    //               content: [
+    //                 'V',
+    //                 { form: { content: [ 'W' ] } },
+    //                 { form: { content: [ 'X' ] } },
+    //                 'Y',
+    //                 { form: { content: [ 'Z' ] } } ] } } ] } } ] },
+    //   'real-world')
+
   test.end() })

@@ -4,6 +4,7 @@ var tokenize = require('./tokenize')
 
 function CommonFormScanner() {
   this.setInput = function(string) {
+    console.log(tokenize(string))
     this.tokens = tokenize(string) }
   this.lex = function() {
     var token = this.tokens.shift()
@@ -11,6 +12,7 @@ function CommonFormScanner() {
     var line = token.line
     var column = token.column
     this.yytext = string
+    this.yylineno = line
     this.yyloc = {
       first_line: line,
       first_column: ( column - 1 ),
