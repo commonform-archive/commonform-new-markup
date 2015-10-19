@@ -4,7 +4,6 @@ var tokenize = require('./tokenize')
 
 function CommonFormScanner() {
   this.setInput = function(string) {
-    console.log(tokenize(string))
     this.tokens = tokenize(string) }
   this.lex = function() {
     var token = this.tokens.shift()

@@ -20,7 +20,7 @@ function tokenize(text) {
     // Split into lines.
     .split('\n')
     // For each line, create an Array of tokens for indentation and content.
-    .map(function(line, index, array) {
+    .map(function(line, index) {
       if ( ALL_SPACE.test(line) || COMMENT.test(line) ) {
         return [ ] }
       else {
@@ -96,14 +96,7 @@ function tokenize(text) {
         lastIndentation = indentation
         lastColumn = ( contentColumn + content.length )
         lastLine = lineNumber
-        return (
-          ( index === ( array.length - 1 ) ) ?
-            arrayOfTokens :
-            arrayOfTokens.concat({
-              type: TOKENS.NEWLINE,
-              line: lastLine,
-              column: ( line.length + 1 ),
-              string: '\n' }) ) } })
+        return arrayOfTokens } })
     .reduce(
       function(tokens, array) {
         return tokens.concat(array) },
